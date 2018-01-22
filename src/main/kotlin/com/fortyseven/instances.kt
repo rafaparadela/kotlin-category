@@ -13,7 +13,6 @@ interface ColorMonoidInstance: Monoid<Color> {
 }
 
 @instance(Box::class)
-interface BoxFunctorInstance : Functor<BoxHK> {
-    override fun <A, B> map(fa: BoxHK<A>, f: kotlin.Function1<A, B>): Box<B> = fa.ev().map(f)
-             fun <A, B> map(fa: HK<F, A>, f: (A) -> B): HK<F, B>
+interface BoxFunctorInstance : Functor<BoxKind> {
+    override fun <A, B> map(fa: BoxKind<A>, f: (A) -> B): Box<B> = fa.ev().map(f)
 }

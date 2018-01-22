@@ -11,8 +11,3 @@ interface ColorMonoidInstance: Monoid<Color> {
             green = min(a.green + b.green, 255),
             blue = min(a.blue + b.blue, 255))
 }
-
-@instance(Box::class)
-interface BoxFunctorInstance : Functor<BoxKind> {
-    override fun <A, B> map(fa: BoxKind<A>, f: (A) -> B): Box<B> = fa.ev().map(f)
-}

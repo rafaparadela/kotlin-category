@@ -1,3 +1,3 @@
-# The science behind functional programming (using Arrow)
+# The science behind functional programming
 
-Sample app to explain some category theory concepts.
+Sample app to explain some category theory concepts, using [Arrow](http://arrow-kt.io/).

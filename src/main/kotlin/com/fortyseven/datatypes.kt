@@ -6,15 +6,15 @@ import arrow.higherkind
 
 @higherkind
 @deriving(Functor::class, Applicative::class, Monad::class)
-sealed class Box<out A> : BoxKind<A> {
+sealed class Box<out A> : BoxOf<A> {
 
     fun <B> map(f: (A) -> B): Box<B> = when (this) {
         Empty -> Empty
         is Full -> Full(f(this.t))
     }
 
-    fun <B> ap(ff: BoxKind<(A) -> B>): Box<B> {
-        val box = ff.ev()
+    fun <B> ap(ff: BoxOf<(A) -> B>): Box<B> {
+        val box = ff.fix()
         return when (this) {
             is Full -> {
                 when (box) {
@@ -26,8 +26,8 @@ sealed class Box<out A> : BoxKind<A> {
         }
     }
 
-    fun <B> product(fb: BoxKind<B>): Box<Tuple2<A, B>> {
-        val box = fb.ev()
+    fun <B> product(fb: BoxOf<B>): Box<Tuple2<A, B>> {
+        val box = fb.fix()
         return when (this) {
             is Full -> {
                 when (box) {
@@ -39,8 +39,8 @@ sealed class Box<out A> : BoxKind<A> {
         }
     }
 
-    fun <B, Z> map2(fb: BoxKind<B>, f: (Tuple2<A, B>) -> Z): Box<Z> {
-        val box = fb.ev()
+    fun <B, Z> map2(fb: BoxOf<B>, f: (Tuple2<A, B>) -> Z): Box<Z> {
+        val box = fb.fix()
         return when (this) {
             is Full -> {
                 when (box) {
@@ -52,9 +52,9 @@ sealed class Box<out A> : BoxKind<A> {
         }
     }
 
-    inline fun <B> flatMap(crossinline f: (A) -> BoxKind<B>): Box<B> {
+    inline fun <B> flatMap(crossinline f: (A) -> BoxOf<B>): Box<B> {
         return when (this) {
-            is Full -> f(this.t).ev()
+            is Full -> f(this.t).fix()
             Empty -> Empty
         }
     }

@@ -2,22 +2,30 @@ group 'com.fortyseven'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.2.10'
+    ext {
+        // Constants
+        gradleVersion = '4.2'
+        gradleVersionsPluginVersion = '0.17.0'
+        javaVersion = JavaVersion.VERSION_1_7
+        kotlinVersion = '1.2.20'
+    }
 
     repositories {
-        mavenCentral()
         jcenter()
         maven { url 'https://jitpack.io' }
         maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
         maven { url "https://dl.bintray.com/jetbrains/markdown/" }
         maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
-        maven { url "https://dl.bintray.com/takhion/maven" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
+
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         classpath 'io.arrow-kt:ank-gradle-plugin:0.5.1'
         classpath 'org.ajoberstar:gradle-git-publish:0.3.2'
+        classpath "me.champeau.gradle:jmh-gradle-plugin:0.4.4"
     }
 }
 
@@ -34,15 +42,16 @@ repositories {
     maven { url "https://dl.bintray.com/jetbrains/markdown/" }
     maven { url "https://dl.bintray.com/takhion/maven" }
     maven { url 'https://jitpack.io' }
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.20"
     compile 'io.kindedj:kindedj:1.1.0'
-    compile 'io.arrow-kt:arrow-core:0.5.5'
-    compile 'io.arrow-kt:arrow-typeclasses:0.5.5'
-    compile 'io.arrow-kt:arrow-instances:0.5.5'
-    kapt    'io.arrow-kt:arrow-annotations-processor:0.5.5'
+    compile 'io.arrow-kt:arrow-core:0.6.2-SNAPSHOT'
+    compile 'io.arrow-kt:arrow-typeclasses:0.6.2-SNAPSHOT'
+    compile 'io.arrow-kt:arrow-instances:0.6.2-SNAPSHOT'
+    kapt    'io.arrow-kt:arrow-annotations-processor:0.6.2-SNAPSHOT'
     testImplementation("junit:junit:4.12")
 }
 
@@ -51,4 +60,10 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+configurations.all {
+    resolutionStrategy {
+        cacheChangingModulesFor 0, 'seconds'
+    }
 }

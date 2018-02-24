@@ -1,8 +1,7 @@
 package com.fortyseven
 
-import arrow.HK
 import arrow.core.Option
-import arrow.core.OptionHK
+import arrow.core.OptionOf
 import arrow.core.Some
 import arrow.core.monad
 import arrow.typeclasses.binding
@@ -22,12 +21,11 @@ class MonadComprehensionTest {
             }
         }
 
-        val pdf2: HK<OptionHK, PDF> = Option.monad().binding {
+        val pdf2: OptionOf<PDF> = Option.monad().binding {
             val user = UserRepository.getUser("123").bind()
             val artist = Spotify.getFavouriteArtist(user.spotifyUsername).bind()
             val page = Wikipedia.getArticle(artist.name).bind()
-            val pdf = Converter.toPDF(page).bind()
-            yields(pdf)
+            Converter.toPDF(page).bind()
         }
 
         assertEquals("PDF1", Some(PDF("blabla")), pdf1)

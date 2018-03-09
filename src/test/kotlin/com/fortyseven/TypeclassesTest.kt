@@ -31,34 +31,34 @@ class TypeclassesTest {
     @Test
     fun testBoxApplicative() {
 
-        fun getPotatoFromDB(name: String): Box<Potato> = Full(Potato(Color()))
-        fun getPizzaFromWS(name: String): Box<PizzaSlide> = Full(PizzaSlide(name))
+        fun getPyramidFromDB(name: String): Box<Pyramid> = Full(Pyramid(Color()))
+        fun getCylinderFromWS(name: String): Box<Cylinder> = Full(Cylinder(name))
 
-        val maybePotato: Box<Potato> = getPotatoFromDB("MyPotato")
-        val maybePizza: Box<PizzaSlide> = getPizzaFromWS("MyPizza")
+        val maybePyramid: Box<Pyramid> = getPyramidFromDB("MyPyramid")
+        val maybeCylinder: Box<Cylinder> = getCylinderFromWS("MyCylinder")
 
 
-        val maybeBeer: Box<Beer> = Box.applicative().map2(maybePotato, maybePizza, { t -> Beer(t.b.name) })
+        val maybeCone: Box<Cone> = Box.applicative().map2(maybePyramid, maybeCylinder, { t -> Cone(t.b.name) })
 
         val boxInt: Box<Int> = Full("Rafa").ap(Box.pure { s -> s.length })
 
         assertEquals("ap works", Full(4), boxInt)
-        assertEquals("map2 works", Full(Beer("MyPizza")), maybeBeer)
+        assertEquals("map2 works", Full(Cone("MyCylinder")), maybeCone)
     }
 
     @Test
     fun testBoxMonad() {
 
-        fun getPotatoFromDB(name: String): Box<Potato> = Full(Potato(Color()))
-        fun getPizzaFromWS(potato: Potato): Box<PizzaSlide> = Full(PizzaSlide(potato.color.red.toString()))
+        fun getPyramidFromDB(name: String): Box<Pyramid> = Full(Pyramid(Color()))
+        fun getCylinderFromWS(pyramid: Pyramid): Box<Cylinder> = Full(Cylinder(pyramid.color.red.toString()))
 
 
-        val beer: Box<Beer> = getPotatoFromDB("MyPotato").flatMap { po ->
-            getPizzaFromWS(po).map { pi ->
-                Beer(pi.name)
+        val cone: Box<Cone> = getPyramidFromDB("MyPyramid").flatMap { pyramid ->
+            getCylinderFromWS(pyramid).map { cylinder ->
+                Cone(cylinder.name)
             }
         }
 
-        assertEquals("flatMap works", Full(Beer("0")), beer)
+        assertEquals("flatMap works", Full(Cone("0")), cone)
     }
 }

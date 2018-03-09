@@ -7,15 +7,15 @@ data class Color(val red: Int = 0, val green: Int = 0, val blue: Int = 0){
     companion object {}
 }
 
-data class Potato(val color: Color) {
+data class Pyramid(val color: Color) {
     companion object {}
 }
 
-data class PizzaSlide(val name: String) {
+data class Cylinder(val name: String) {
     companion object {}
 }
 
-data class Beer(val name: String) {
+data class Cone(val name: String) {
     companion object {}
 }
 
